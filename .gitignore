@@ -1,0 +1,12 @@
+# python virtual environment and others specific content
+.*
+!/.gitignore
+
+# logs
+logs/
+
+# reports
+reports/
+
+# screenshots
+screenshots/
