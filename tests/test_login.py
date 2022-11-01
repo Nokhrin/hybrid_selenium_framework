@@ -1,10 +1,12 @@
 # test login into admin area
-
 import pytest
-from selenium import webdriver
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from pages.login_page import LoginPage
 from utilities.read_properties import ReadConfig
-from utilities.custom_logger import LogGenerator
+from utilities.custom_logger import generate_log
+from selenium.common.exceptions import TimeoutException
 
 
 class Test_001_Login:
@@ -15,16 +17,27 @@ class Test_001_Login:
     password = ReadConfig.get_password()
 
     # logger object
-    logger = LogGenerator.get_logger()
+    # logger = LogGenerator.generate_log()
+    logger = generate_log()
+
+    # logging.config.fileConfig('../configurations/logging.conf')
+    # logger = logging.getLogger("Test_001_Login")
 
     # test methods
     @pytest.mark.fresh
     def test_homepage_title(self, setup):
         """Homepage should be like OrangeHRM"""
-        self.logger.info('************Test_001_Login************')
+
+        self.logger.debug('************Test_001_Login************')
         self.logger.info('************Verify homepage title************')
         self.driver = setup
-        self.driver.get(self.base_url)
+
+        try:
+            self.driver.get(self.base_url)
+        except TimeoutException as TO_ex:
+            self.logger.error(f'Exception has been thrown: {TO_ex}')
+            self.driver.close()
+
         actual_title = self.driver.title
         if actual_title == 'OrangeHRM':
             self.driver.quit()
@@ -33,10 +46,11 @@ class Test_001_Login:
         else:
             self.driver.save_screenshot('screenshots/test_homepage.png')
             self.driver.quit()
-            self.logger.info('************Homepage title test failed************')
+            self.logger.warning('************Homepage title test failed************')
             assert False
 
-    # @pytest.mark.xfail
+    @pytest.mark.skip
+    @pytest.mark.xfail
     def test_homepage_title_failed(self, setup):
         """Homepage should not be like not OrangeHRM"""
         self.logger.info('************Test_001_Login************')
@@ -49,7 +63,7 @@ class Test_001_Login:
         actual_title = self.driver.title
         if actual_title == 'not-OrangeHRM':
             self.driver.quit()
-            self.logger.info('************Homepage title test passed************')
+            self.logger.warning('************Homepage title test passed************')
             assert True
         else:
             self.driver.save_screenshot('screenshots/test_homepage.png')
@@ -57,6 +71,7 @@ class Test_001_Login:
             self.logger.info('************Homepage title test failed************')
             assert False
 
+    @pytest.mark.skip
     def test_login(self, setup):
         self.driver = setup
         self.driver.get(self.base_url)

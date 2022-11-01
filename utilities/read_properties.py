@@ -5,6 +5,7 @@ import configparser
 config = configparser.RawConfigParser()
 config.read('configurations/config.ini')
 
+
 class ReadConfig():
     @staticmethod  # to call method without creating the object
     def get_app_url():
