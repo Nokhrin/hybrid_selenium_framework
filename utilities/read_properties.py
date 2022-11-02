@@ -21,3 +21,13 @@ class ReadConfig():
     def get_password():
         password = config.get('common data', 'password')
         return password
+
+    @staticmethod
+    def get_expected_url():
+        password = config.get('common data', 'expected_url')
+        return password
+
+    @staticmethod
+    def get_excel_file():
+        xl_file = config.get('test data', 'xl_for_ddt')
+        return xl_file
