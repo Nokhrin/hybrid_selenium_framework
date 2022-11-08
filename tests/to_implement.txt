@@ -1,0 +1,18 @@
+1) test login
+2) add a new customer
+- go to admin account
+- open menu
+    two possibilities:
+      - arrow button for maximized window
+      - hamburger button for other cases
+- click PIM page button
+- click Add button
+- fill name
+- remember id
+- click Add
+- validate success message
+- validate account page is opened
+- validate user id on account page
+
+3) search customer by email
+4) search customer by name

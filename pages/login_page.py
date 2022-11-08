@@ -57,7 +57,7 @@ class LoginPage:
                         (By.XPATH, self.span_usermenu_xpath)
                     ), message="profile link is not clickable"
                 )
-        profile_link.click()
+        profile_link.click
 
     def log_out(self):
         logout_link = self.wait.until(

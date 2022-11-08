@@ -6,14 +6,19 @@ from selenium.webdriver.chrome.service import Service
 
 @pytest.fixture()
 def setup(browser):
-    if browser == 'chrome':
-        driver_path = '/home/nohal/practicing/auto_testing/selenium_projects/drivers/chromedriver'
+    if browser == 'edge':
+        driver_path = '/home/nohal/practicing/auto_testing/selenium_projects/drivers/msedgedriver'
         service = Service(executable_path=driver_path)
-        driver = webdriver.Chrome(service=service)
-    else:
+        driver = webdriver.Edge(service=service)
+    elif browser == 'firefox':
         driver_path = '/home/nohal/practicing/auto_testing/selenium_projects/drivers/geckodriver'
         service = Service(executable_path=driver_path)
         driver = webdriver.Firefox(service=service)
+    else:
+        # chrome by default
+        driver_path = '/home/nohal/practicing/auto_testing/selenium_projects/drivers/chromedriver'
+        service = Service(executable_path=driver_path)
+        driver = webdriver.Chrome(service=service)
     return driver
 
 
@@ -24,7 +29,7 @@ def pytest_addoption(parser):
 
 @pytest.fixture()
 def browser(request):
-    return request.config.getoption('--browser')
+    return request.config.getoption('--browser').lower()
 
 
 # ==> Pytest HTML Report

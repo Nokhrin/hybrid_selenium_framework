@@ -24,7 +24,7 @@ class Test_001_Login:
     # logger = logging.getLogger("Test_001_Login")
 
     # test methods
-    @pytest.mark.fresh
+    @pytest.mark.skip
     def test_homepage_title(self, setup):
         """Homepage should be like OrangeHRM"""
 
@@ -90,3 +90,18 @@ class Test_001_Login:
             self.driver.save_screenshots('../screenshots/test_login.png')
             self.driver.quit()
             assert False
+
+
+    @pytest.mark.fresh
+    def test_go_to_add_new_user(self, setup):
+        self.driver = setup
+        self.driver.get(self.base_url)
+        self.login_page_obj = LoginPage(self.driver)
+        # log into admin account
+        self.login_page_obj.set_username(self.username)
+        self.login_page_obj.set_password(self.password)
+        self.login_page_obj.click_login_button()
+
+        self.login_page_obj.open_pim_page()
+
+        assert True
