@@ -29,7 +29,8 @@ def pytest_addoption(parser):
 
 @pytest.fixture()
 def browser(request):
-    return request.config.getoption('--browser').lower()
+    if request.config.getoption('--browser'):
+        return request.config.getoption('--browser').lower()
 
 
 # ==> Pytest HTML Report

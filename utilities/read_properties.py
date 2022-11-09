@@ -28,6 +28,18 @@ class ReadConfig():
         return password
 
     @staticmethod
+    def get_user_firstname():
+        return config.get('new user data', 'firstname')
+
+    @staticmethod
+    def get_user_middlename():
+        return config.get('new user data', 'middlename')
+
+    @staticmethod
+    def get_user_lastname():
+        return config.get('new user data', 'lastname')
+
+    @staticmethod
     def get_excel_file():
         xl_file = config.get('test data', 'xl_for_ddt')
         return xl_file
