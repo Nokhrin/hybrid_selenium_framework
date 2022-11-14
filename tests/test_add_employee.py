@@ -16,8 +16,10 @@ class Test_003_AddEmployee:
     middlename = ReadConfig.get_user_middlename()
     lastname = ReadConfig.get_user_lastname()
 
-    employee_username = 'username1'
-    employee_password = 'password1'
+    employee_username = ReadConfig.get_new_employee_username()
+    employee_password = ReadConfig.get_new_employee_password()
+    expected_employee_short_name = ReadConfig.get_user_short_name()
+    expected_new_employee_url = ReadConfig.get_expected_employee_url()
 
     def generate_password(self, size=8, chars=string.ascii_letters + string.digits + string.punctuation):
         """Generate random string of give size for password"""
@@ -56,14 +58,30 @@ class Test_003_AddEmployee:
             self.emp_id = self.add_employee.get_employee_id()
 
             self.add_employee.click_login_details()
+
+            self.logger.info(f'try to use username: {self.employee_username}')
             self.add_employee.fill_in_username(self.employee_username)
             self.add_employee.click_disabled_button()
             self.add_employee.click_enabled_button()
+
+            self.logger.info(f'try to use password: {self.employee_password}')
             self.add_employee.fill_in_password(self.employee_password)
             self.add_employee.fill_in_confirm_password(self.employee_password)
 
             self.add_employee.click_save_employee()
             self.logger.info(f'data for employee # {self.emp_id} has been saved')
+
+            self.logger.info('***** verify data for created employee *****')
+            # current_url = self.driver.current_url
+            # self.logger.info(f'current_url: {current_url}')
+            # current_url = current_url[:current_url.rfind('/') + 1]
+            # self.logger.info(f'current_url prepared: {current_url}')
+
+            self.logger.info('*** verify employee id ***')
+            self.logger.info(self.add_employee.check_saved_employee_id())
+
+            # self.logger.info('*** verify short name ***')
+            # self.add_employee.check_saved_employee_short_name(self.expected_employee_short_name)
         finally:
             self.driver.quit()
             self.logger.info('*** quit webdriver ***')

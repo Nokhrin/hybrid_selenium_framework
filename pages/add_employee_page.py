@@ -24,6 +24,9 @@ class AddEmployee:
     input_password_xpath = "//label[text()='Password']/parent::*/following-sibling::*/input"
     input_confirm_password_xpath = "//label[text()='Confirm Password']/parent::*/following-sibling::*/input"
 
+    text_saved_short_name_xpath = "//div[@class='orangehrm-edit-employee-name']/h6"
+    input_saved_employee_id_xpath = "//label[text()='Employee Id']/parent::*/parent::*//input"
+
     # action methods for locators
     def __init__(self, driver):
         """Initiate webdriver"""
@@ -114,3 +117,21 @@ class AddEmployee:
                 (By.XPATH, self.input_confirm_password_xpath)
             ), message='confirm password textbox can not be located'
         ).send_keys(password)
+
+    def check_saved_employee_id(self):
+        return self.wait.until(EC.visibility_of_element_located(
+                (By.XPATH, self.input_saved_employee_id_xpath)
+            )).text
+
+        # return self.wait.until(EC.text_to_be_present_in_element(
+        #         (By.XPATH, self.input_saved_employee_id_xpath),
+        #         text_=expected_id
+        #     ), message='employee id does not match'
+        # )
+
+    def check_saved_employee_short_name(self, expected_short_name):
+        return self.wait.until(EC.text_to_be_present_in_element(
+                (By.XPATH, self.text_saved_short_name_xpath),
+                text_=expected_short_name
+            ), message='short name does not match'
+        )
