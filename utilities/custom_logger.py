@@ -6,7 +6,7 @@ import logging.config
 class LogGenerator:
     # @staticmethod
     def generate_log():
-        logging.basicConfig(filename='automation.log')
+        logging.basicConfig(filename='automation.log', filemode='w')
         logging.config.fileConfig('configurations/logging.conf')
         logger = logging.getLogger('Test Logger')
         logger.setLevel(logging.DEBUG)

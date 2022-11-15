@@ -73,8 +73,16 @@ class AddEmployee:
     def get_employee_id(self):
         return self.wait.until(EC.visibility_of_element_located(
                 (By.XPATH, self.input_employee_id_xpath)
-            ), message='employee id can not be selected'
+            ), message='employee id inputbox can not be found'
         ).get_attribute('value')
+
+    def set_employee_id(self, employee_id: str):
+        input_employee_id = self.wait.until(EC.visibility_of_element_located(
+                (By.XPATH, self.input_employee_id_xpath)
+            ), message='employee id inputbox can not be found'
+        )
+        input_employee_id.clear()
+        input_employee_id.send_keys(employee_id)
 
     def click_save_employee(self):
         self.wait.until(EC.visibility_of_element_located(
@@ -118,20 +126,14 @@ class AddEmployee:
             ), message='confirm password textbox can not be located'
         ).send_keys(password)
 
-    def check_saved_employee_id(self):
+    def get_saved_employee_id(self):
         return self.wait.until(EC.visibility_of_element_located(
                 (By.XPATH, self.input_saved_employee_id_xpath)
-            )).text
+            ), message='employee id can not be found'
+        ).get_attribute('value')
 
-        # return self.wait.until(EC.text_to_be_present_in_element(
-        #         (By.XPATH, self.input_saved_employee_id_xpath),
-        #         text_=expected_id
-        #     ), message='employee id does not match'
-        # )
-
-    def check_saved_employee_short_name(self, expected_short_name):
-        return self.wait.until(EC.text_to_be_present_in_element(
-                (By.XPATH, self.text_saved_short_name_xpath),
-                text_=expected_short_name
-            ), message='short name does not match'
-        )
+    def get_saved_employee_short_name(self):
+        return self.wait.until(EC.visibility_of_element_located(
+                (By.XPATH, self.text_saved_short_name_xpath)
+            ), message='short name can not be found'
+        ).get_attribute('textContent')
