@@ -1,23 +1,25 @@
 # setup fixture
 from selenium import webdriver
 import pytest
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.service import Service as CS
+from selenium.webdriver.firefox.service import Service as FS
+from selenium.webdriver.edge.service import ES
 
 
 @pytest.fixture()
 def setup(browser):
     if browser == 'edge':
         driver_path = '/home/nohal/practicing/auto_testing/selenium_projects/drivers/msedgedriver'
-        service = Service(executable_path=driver_path)
+        service = ES(executable_path=driver_path)
         driver = webdriver.Edge(service=service)
     elif browser == 'firefox':
         driver_path = '/home/nohal/practicing/auto_testing/selenium_projects/drivers/geckodriver'
-        service = Service(executable_path=driver_path)
+        service = FS(executable_path=driver_path)
         driver = webdriver.Firefox(service=service)
     else:
         # chrome by default
         driver_path = '/home/nohal/practicing/auto_testing/selenium_projects/drivers/chromedriver'
-        service = Service(executable_path=driver_path)
+        service = CS(executable_path=driver_path)
         driver = webdriver.Chrome(service=service)
     return driver
 

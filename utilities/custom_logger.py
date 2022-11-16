@@ -6,13 +6,12 @@ import logging.config
 class LogGenerator:
     # @staticmethod
     def generate_log():
-        logging.basicConfig(filename='automation.log', filemode='w')
         logging.config.fileConfig('configurations/logging.conf')
         logger = logging.getLogger('Test Logger')
         logger.setLevel(logging.DEBUG)
 
         # logs for writing to file
-        file_h = logging.FileHandler(filename='logs/automation.log')
+        file_h = logging.FileHandler('logs/automation.log', 'w')
         file_h.setLevel(logging.DEBUG)
 
         # logs for writing to console
