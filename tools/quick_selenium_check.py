@@ -11,7 +11,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 URL = 'https://www.orangehrm.com/'
 # header_homepage_xpath = "/html/body/div/div/div/section[1]/div[2]/div/div/div/h1"  # test locator
-header_homepage_xpath = "//div[@class='homepage-slider-content']/h1"
+# header_homepage_xpath = "//div[@class='homepage-slider-content']/h1
+a_href_directory_xpath = "//a[@class='oxd-main-menu-item active']"
 
 
 # get webdriver
@@ -24,11 +25,15 @@ print('**** page opened ****')
 print(driver.current_url)
 print(driver.title)
 
-header = driver.find_element(by=By.XPATH, value=header_homepage_xpath)
+element = driver.find_element(by=By.XPATH, value=a_href_directory_xpath)
 
 # both methods work as expected - return text content of the tag
-print(f"textContent: {header.get_attribute('textContent')}")
-print(f"innerText: {header.get_attribute('innerText')}")
+print(f"textContent: {element.get_attribute('textContent')}")
+print(f"innerText: {element.get_attribute('innerText')}")
+
+element.click()
+print(driver.current_url)
+print(driver.title)
 
 print('**** page closed ****')
 

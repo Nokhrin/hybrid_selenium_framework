@@ -19,14 +19,8 @@ class Test_003_AddEmployee:
 
     employee_username = ReadConfig.get_new_employee_username()
     employee_password = ReadConfig.get_new_employee_password()
-    expected_employee_short_name = ReadConfig.get_user_short_name()
-    expected_new_employee_url = ReadConfig.get_expected_employee_url()
-
-    def generate_password(self, size=8, chars=string.ascii_letters + string.digits + string.punctuation):
-        """Generate random string of give size for password"""
-        return ''.join([random.choice(chars) for x in range(size)])
-
-    # new_employee_password = generate_password(size=16)
+    expected_employee_url = ReadConfig.get_expected_employee_url()
+    expected_employee_short_name = ReadConfig.get_expected_employee_short_name()
 
     def test_add_employee(self, setup):
         try:
@@ -58,16 +52,16 @@ class Test_003_AddEmployee:
             self.add_employee.write_last_name(self.lastname)
 
             # time.sleep(5)
-            # self.emp_id = str(random.randint(1, 9999999999))
-            # self.logger.info(f'set random employee id: {self.emp_id}')
-            # self.add_employee.set_employee_id(self.emp_id)
+            # self.expected_employee_id = str(random.randint(1, 9999999999))
+            # self.logger.info(f'set random employee id: {self.expected_employee_id}')
+            # self.add_employee.set_employee_id(self.expected_employee_id)
 
-            self.emp_id = self.add_employee.get_employee_id()
+            self.expected_employee_id = self.add_employee.get_employee_id()
 
             self.add_employee.click_login_details()
 
-            self.logger.info(f'try to use username: {self.employee_username + self.emp_id}')
-            self.add_employee.fill_in_username(self.employee_username + self.emp_id)
+            self.logger.info(f'try to use username: {self.employee_username + self.expected_employee_id}')
+            self.add_employee.fill_in_username(self.employee_username + self.expected_employee_id)
             self.add_employee.click_disabled_button()
             self.add_employee.click_enabled_button()
 
@@ -76,7 +70,7 @@ class Test_003_AddEmployee:
             self.add_employee.fill_in_confirm_password(self.employee_password)
 
             self.add_employee.click_save_employee()
-            self.logger.info(f'data for employee # {self.emp_id} has been saved')
+            self.logger.info(f'data for employee # {self.expected_employee_id} has been saved')
 
             # verification of employee created
             # IDEA - if all 3 checks are passed, employee account was created correctly
@@ -85,29 +79,38 @@ class Test_003_AddEmployee:
             # - check employee short name - should match 'firstname' + 'lastname' provided on adding
 
             self.logger.info('***** verify data for created employee *****')
+            time.sleep(10)  # TODO - figure out how to wait correctly
 
-            # get url
-            current_url = self.driver.current_url
-            current_url = current_url[:current_url.rfind('/') + 1]
-            self.logger.info(f'current_url: {current_url}')
-
-            # if self.driver.current_url == self.expected_new_employee_url:
-            #     self.logger.info('** current url is correct **')
-            # else:
-            #     self.logger.info(f'** current url {self.driver.current_url} does not match {self.expected_new_employee_url} **')
-
-            # time.sleep(5)
-
+            # get employee id
             self.logger.info('*** verify employee id ***')
-            self.logger.info(f'expected: {self.emp_id}')
-            self.logger.info(f'actual: {self.add_employee.get_saved_employee_id()}')
+            self.logger.info(f'expected: {self.expected_employee_id}')
+            self.actual_employee_id = self.add_employee.get_saved_employee_id()
+            self.logger.info(f'actual: {self.actual_employee_id}')
 
-            time.sleep(5)
-            #
+            # get employee short name
             self.logger.info('*** verify short name ***')
-            self.logger.info(self.add_employee.get_saved_employee_short_name())
-            #
-            time.sleep(5)
+            self.logger.info(f'expected short name: {self.expected_employee_short_name}')
+            self.actual_employee_short_name = self.add_employee.get_employee_short_name()
+            self.logger.info(f'actual short name: {self.actual_employee_short_name}')
+
+            # get url - after employee id and short name - to guaranty the load of the employee details page
+            self.current_url = self.driver.current_url
+            self.current_url = self.current_url[:self.current_url.rfind('/') + 1]
+            self.logger.info(f'current_url: {self.current_url}')
+
+            # check all 3 conditions
+            if self.current_url == self.expected_employee_url and \
+                    self.expected_employee_id == self.actual_employee_id and \
+                    self.expected_employee_short_name == self.actual_employee_short_name:
+                assert True
+            else:
+                if self.current_url != self.expected_employee_url:
+                    self.logger.warning(f'{self.current_url} not equal {self.expected_employee_url}')
+                if self.expected_employee_id != self.actual_employee_id:
+                    self.logger.warning(f'{self.expected_employee_id} not equal {self.actual_employee_id}')
+                if self.expected_employee_short_name != self.actual_employee_short_name:
+                    self.logger.warning(f'{self.expected_employee_short_name} not equal {self.actual_employee_short_name}')
+                assert False, 'see log file for warnings'
 
         finally:
             self.driver.quit()

@@ -48,7 +48,7 @@ class ReadConfig():
         return config.get('new employee data', 'password')
 
     @staticmethod
-    def get_user_short_name():
+    def get_expected_employee_short_name():
         return config.get('new employee data', 'short_name')
 
     @staticmethod

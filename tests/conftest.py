@@ -3,7 +3,7 @@ from selenium import webdriver
 import pytest
 from selenium.webdriver.chrome.service import Service as CS
 from selenium.webdriver.firefox.service import Service as FS
-from selenium.webdriver.edge.service import ES
+from selenium.webdriver.edge.service import Service as ES
 
 
 @pytest.fixture()

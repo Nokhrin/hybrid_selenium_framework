@@ -1,6 +1,7 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 
 class AddEmployee:
@@ -24,7 +25,7 @@ class AddEmployee:
     input_password_xpath = "//label[text()='Password']/parent::*/following-sibling::*/input"
     input_confirm_password_xpath = "//label[text()='Confirm Password']/parent::*/following-sibling::*/input"
 
-    text_saved_short_name_xpath = "//div[@class='orangehrm-edit-employee-name']/h6"
+    text_actual_short_name_xpath = "//div[@class='orangehrm-edit-employee-name']/h6"
     input_saved_employee_id_xpath = "//label[text()='Employee Id']/parent::*/parent::*//input"
 
     # action methods for locators
@@ -132,8 +133,11 @@ class AddEmployee:
             ), message='employee id can not be found'
         ).get_attribute('value')
 
-    def get_saved_employee_short_name(self):
-        return self.wait.until(EC.visibility_of_element_located(
-                (By.XPATH, self.text_saved_short_name_xpath)
-            ), message='short name can not be found'
-        ).get_attribute('textContent')
+    def get_employee_short_name(self):
+        try:
+            return self.wait.until(EC.presence_of_element_located(
+                    (By.XPATH, self.text_actual_short_name_xpath)
+                ), message='short name can not be found'
+            ).get_attribute('textContent')
+        except TimeoutException:
+            return 'timeout for short name'
