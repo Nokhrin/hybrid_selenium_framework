@@ -72,7 +72,7 @@ class EmployeesDirectory:
                 (By.XPATH, self.dropdown_div_job_title_xpath)
             ), message='job title can not be sent'
         ).send_keys(employee_title)
-        
+        time.sleep(30)
         self.wait.until(EC.element_to_be_clickable(
                 (By.XPATH, self.dropdown_div_job_title_xpath)
             ), message='dropdown_div_job_title can\'t be clicked'
@@ -86,9 +86,15 @@ class EmployeesDirectory:
         - navigate a value based on it's text when it's visible
         - click a value when it's clickable
         """
-        self.wait.until(EC.element_to_be_clickable(
-                (By.XPATH, self.dropdown_div_location_xpath)
-        ))
+        # self.wait.until(EC.element_to_be_clickable(
+        #         (By.XPATH, self.dropdown_div_location_xpath)
+        # )).click()
+        self.driver.find_element(By.XPATH, self.dropdown_div_location_xpath).click()
+        time.sleep(3)
+        self.driver.find_element(By.XPATH, self.dropdown_div_location_xpath).send_keys(employee_location)
+        time.sleep(3)
+        self.driver.find_element(By.XPATH, self.dropdown_div_location_xpath).click()
+        time.sleep(3)
 
     def click_search_button(self):
         self.wait.until(EC.element_to_be_clickable(
@@ -101,9 +107,10 @@ class EmployeesDirectory:
                 (By.XPATH, self.button_reset_xpath)
             ), message='reset can not be clicked'
         ).click()
+        time.sleep(3)
 
     def get_records_found(self):
-        records_str = self.wait.until(EC.presence_of_element_located(
+        records_str = self.wait.until(EC.visibility_of_element_located(
                 (By.XPATH, self.text_records_found_xpath)
             ), message='total can not be located'
         ).text

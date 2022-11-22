@@ -22,9 +22,12 @@ class Test_004_SearchEmployee:
     employee_password = ReadConfig.get_new_employee_password()
 
     @pytest.mark.fresh
-    def test_add_and_go_to_directory(self, setup):
+    def test_search_filter(self, setup):
+        """
+        Test search and reset functionality
+        """
         try:
-            self.logger.info('*** Test_004_SearchEmployee ***')
+            self.logger.info('*** Test_004_SearchEmployeeFilter ***')
             self.driver = setup
             self.driver.get(url=self.base_url)
             self.driver.maximize_window()
@@ -71,27 +74,30 @@ class Test_004_SearchEmployee:
             self.logger.info(f'switch to directory')
             self.directory_page.open_directory()
 
-            self.logger.info(f'here is the implicit wait for url to change')
             self.logger.info(f'current url: {self.driver.current_url}')
             self.logger.info(f'current title: {self.driver.title}')
-            self.logger.info(f'total records found: {self.directory_page.get_records_found()}')
 
-            self.directory_page.search_employee_by_title('a')
-            time.sleep(5)
-            self.directory_page.click_search_button()
-            time.sleep(5)
+            time.sleep(4)
             initial_total = self.directory_page.get_records_found()
+            self.logger.info(f'total records found: {initial_total}')
+
+            self.directory_page.pick_location_from_div_dropdown('c')
+            self.directory_page.click_search_button()
+            time.sleep(4)
             self.logger.info(f'records found after search: {self.directory_page.get_records_found()}')
 
             self.directory_page.click_reset_button()
-            time.sleep(5)
-            self.logger.info(f'records found after reset: {self.directory_page.get_records_found()}')
-
+            time.sleep(4)
             final_total = self.directory_page.get_records_found()
+            self.logger.info(f'records found after reset: {final_total}')
 
-            assert initial_total == final_total
+            if initial_total == final_total:
+                assert True
+            else:
+                self.logger.warning(f'Initial total value {initial_total} and total value after search reset {final_total} don\'t match')
+                assert False
 
         finally:
             self.driver.quit()
             self.logger.info('*** quit webdriver ***')
-            self.logger.info('*** Test_003_AddEmployee FINISHED ***')
+            self.logger.info('*** Test_004_SearchEmployeeFilter FINISHED ***')
