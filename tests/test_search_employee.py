@@ -51,14 +51,45 @@ class Test_004_SearchEmployee:
             self.add_employee_page.fill_in_confirm_password(self.employee_password)
             self.add_employee_page.click_save_employee()
 
-            # go to directory page
-            self.directory_page = EmployeesDirectory(driver=self.driver)
-            self.logger.info(f'attempt to click')
-            # time.sleep(10)  # TODO - temporary for testing
-            self.directory_page.open_directory()
+            # test IDEA - check search/reset functionality:
+            # - go to directory page
+            # - get total of records
+            # - filter by location (title/name/etc)
+            # - get new total of records
+            # - make sure the total is different
+            # - reset search
+            # - make sure the total is the same as initial
 
+            self.logger.info('!!!!!!!!!!!!!!!!!!!!!')
+            self.logger.info('before switching to directory')
             self.logger.info(f'current url: {self.driver.current_url}')
             self.logger.info(f'current title: {self.driver.title}')
+
+            # go to directory page
+            self.directory_page = EmployeesDirectory(driver=self.driver)
+            self.logger.info('!!!!!!!!!!!!!!!!!!!!!')
+            self.logger.info(f'switch to directory')
+            self.directory_page.open_directory()
+
+            self.logger.info(f'here is the implicit wait for url to change')
+            self.logger.info(f'current url: {self.driver.current_url}')
+            self.logger.info(f'current title: {self.driver.title}')
+            self.logger.info(f'total records found: {self.directory_page.get_records_found()}')
+
+            self.directory_page.search_employee_by_title('a')
+            time.sleep(5)
+            self.directory_page.click_search_button()
+            time.sleep(5)
+            initial_total = self.directory_page.get_records_found()
+            self.logger.info(f'records found after search: {self.directory_page.get_records_found()}')
+
+            self.directory_page.click_reset_button()
+            time.sleep(5)
+            self.logger.info(f'records found after reset: {self.directory_page.get_records_found()}')
+
+            final_total = self.directory_page.get_records_found()
+
+            assert initial_total == final_total
 
         finally:
             self.driver.quit()
